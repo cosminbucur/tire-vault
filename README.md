@@ -8,6 +8,10 @@ cd my-app
 # install dependencies
 pnpm install
 
+# typescript
+pnpm add -D typescript
+npx tsc --init
+
 # supabase client
 pnpm add @supabase/supabase-js
 
