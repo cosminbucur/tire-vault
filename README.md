@@ -1,7 +1,11 @@
+# Initial setup
+
 ```sh
 # create react app
 pnpm create vite@latest my-app --template react
 cd my-app
+
+# install dependencies
 pnpm install
 
 # supabase client
@@ -13,6 +17,17 @@ pnpm add -D supabase
 # init supabase
 pnpm exec supabase init
 pnpm exec supabase start
+
+# tailwindcss
+pnpm add -D @tailwindcss/vite
+
+# run
+pnpm run dev
+
+
+# .env.local
+VITE_SUPABASE_URL=your_project_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
 ```
 
 ======================================================================================
