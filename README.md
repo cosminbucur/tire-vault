@@ -19,6 +19,7 @@ NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest init -d
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add button -y
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add avatar dropdown-menu -y
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add label form -y
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add radio-group popover command separator -y
 
 # supabase client
 pnpm add @supabase/supabase-js

@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { cn } from "@/lib/utils"
 import { CustomerForm } from "./CustomerForm"
 import { ServiceForm } from "./ServiceForm"
+import { TireForm } from "./TireForm"
 
 const steps = [
   {
@@ -117,6 +118,8 @@ export function VisitStepper() {
           <CustomerForm embedded={true} />
         ) : currentStep === 1 ? (
           <ServiceForm embedded={true} />
+        ) : currentStep === 2 ? (
+          <TireForm embedded={true} />
         ) : (
           <div className="w-full max-w-lg space-y-6 animate-in fade-in zoom-in-95 duration-500 my-auto">
             <div className="flex flex-col items-center text-center space-y-4">
