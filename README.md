@@ -17,6 +17,7 @@ pnpm add -D shadcn-ui
 npx shadcn@latest init -d
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest init -d
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add button -y
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add avatar dropdown-menu -y
 
 # supabase client
 pnpm add @supabase/supabase-js

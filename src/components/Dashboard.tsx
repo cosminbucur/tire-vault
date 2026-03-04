@@ -1,9 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-col gap-6 p-6 min-h-screen bg-background text-foreground max-w-7xl mx-auto w-full">
+    <div className="flex flex-col gap-6 p-6 max-w-7xl mx-auto w-full">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
@@ -73,9 +74,11 @@ export default function Dashboard() {
                 { user: "Diana Prince", action: "started a trial", time: "5 hours ago", avatar: "DP" },
               ].map((activity, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-xs border border-primary/20">
-                    {activity.avatar}
-                  </div>
+                  <Avatar className="h-9 w-9 border border-primary/10 transition-transform hover:scale-105">
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
+                      {activity.avatar}
+                    </AvatarFallback>
+                  </Avatar>
                   <div className="flex-1 space-y-1">
                     <p className="text-sm font-medium leading-none">
                       {activity.user}
