@@ -12,6 +12,7 @@ Tech stack
 - css: TailwindCSS
 - ui: Shadcn
 
+- routing: react-router-dom
 - database: Supabase
 - authentication: Supabase
 - form validation: zod

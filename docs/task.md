@@ -9,6 +9,7 @@
 - css: TailwindCSS
 - ui: Shadcn
 
+- routing: react-router-dom
 - database: Supabase
 - authentication: Supabase
 - form validation: zod
@@ -197,3 +198,15 @@ Updated package.json to have "main": "dist-electron/main.js", configured the "bu
 How to use it:
 - Run pnpm dev to start Vite. Since the Electron plugin is enabled, it will automatically spin up the desktop window and use Hot Module Replacement (HMR) seamlessly as you code!
 - Run pnpm build to generate your Electron application packages inside a newly created dist-electron/release folder. I have already started a background build and it's currently downloading the macOS Electron binaries.
+
+## Visits Page
+
+🤖 create a visits page where I can see all the visits in a table.
+Add a search bar to search visits by license plate.
+
+Display the following columns:
+- license plate
+- customer name
+- services performed
+- date
+- status

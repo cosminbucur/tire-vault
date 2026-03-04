@@ -5,7 +5,7 @@ import './App.css'
 import Dashboard from '@/components/Dashboard'
 import Header from '@/components/Header'
 import Auth from '@/components/Auth'
-
+import { Routes, Route, Navigate } from 'react-router-dom'
 function App() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
@@ -46,7 +46,10 @@ function App() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1">
-        <Dashboard />
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </main>
     </div>
   )

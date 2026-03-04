@@ -60,10 +60,6 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setView("customer")} className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            New Customer
-          </Button>
           <Button onClick={() => setView("visit")} className="flex items-center gap-2 shadow-lg hover:shadow-primary/20 bg-primary text-primary-foreground">
             <FileText className="h-4 w-4" />
             Register Visit
