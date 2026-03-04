@@ -5,6 +5,8 @@ import { User, Wrench, Disc, ClipboardCheck, ChevronRight, ChevronLeft, Check } 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { CustomerForm } from "./CustomerForm"
+import { ServiceForm } from "./ServiceForm"
 
 const steps = [
   {
@@ -110,34 +112,40 @@ export function VisitStepper() {
         </div>
       </CardHeader>
 
-      <CardContent className="min-h-[400px] flex flex-col justify-center items-center py-12 px-6">
-        <div className="w-full max-w-lg space-y-6 animate-in fade-in zoom-in-95 duration-500">
-          <div className="flex flex-col items-center text-center space-y-4">
-            <div className="p-4 bg-primary/5 rounded-2xl ring-1 ring-primary/20 animate-bounce-subtle">
-              {React.createElement(steps[currentStep].icon, { className: "h-12 w-12 text-primary" })}
+      <CardContent className="min-h-[450px] flex flex-col items-center py-8 px-6">
+        {currentStep === 0 ? (
+          <CustomerForm embedded={true} />
+        ) : currentStep === 1 ? (
+          <ServiceForm embedded={true} />
+        ) : (
+          <div className="w-full max-w-lg space-y-6 animate-in fade-in zoom-in-95 duration-500 my-auto">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-4 bg-primary/5 rounded-2xl ring-1 ring-primary/20 animate-bounce-subtle">
+                {React.createElement(steps[currentStep].icon, { className: "h-12 w-12 text-primary" })}
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-xl font-semibold tracking-tight">{steps[currentStep].title}</h2>
+                <p className="text-muted-foreground max-w-sm">
+                  Placeholder for {steps[currentStep].description}. Details for this step will be implemented soon.
+                </p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h2 className="text-xl font-semibold tracking-tight">{steps[currentStep].title}</h2>
-              <p className="text-muted-foreground max-w-sm">
-                Placeholder for {steps[currentStep].description}. Details for this step will be implemented soon.
-              </p>
+            
+            <div className="grid grid-cols-1 gap-4 opacity-50 select-none">
+              <div className="h-10 w-full bg-muted rounded-md border border-dashed border-border/50 flex items-center px-4">
+                <div className="h-2 w-1/3 bg-muted-foreground/20 rounded-full" />
+              </div>
+              <div className="h-10 w-full bg-muted rounded-md border border-dashed border-border/50 flex items-center px-4">
+                <div className="h-2 w-1/2 bg-muted-foreground/20 rounded-full" />
+              </div>
+              <div className="h-24 w-full bg-muted rounded-md border border-dashed border-border/50 flex flex-col gap-2 p-4">
+                <div className="h-2 w-3/4 bg-muted-foreground/20 rounded-full" />
+                <div className="h-2 w-2/3 bg-muted-foreground/20 rounded-full" />
+                <div className="h-2 w-1/2 bg-muted-foreground/20 rounded-full" />
+              </div>
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 gap-4 opacity-50 select-none">
-            <div className="h-10 w-full bg-muted rounded-md border border-dashed border-border/50 flex items-center px-4">
-              <div className="h-2 w-1/3 bg-muted-foreground/20 rounded-full" />
-            </div>
-            <div className="h-10 w-full bg-muted rounded-md border border-dashed border-border/50 flex items-center px-4">
-              <div className="h-2 w-1/2 bg-muted-foreground/20 rounded-full" />
-            </div>
-            <div className="h-24 w-full bg-muted rounded-md border border-dashed border-border/50 flex flex-col gap-2 p-4">
-              <div className="h-2 w-3/4 bg-muted-foreground/20 rounded-full" />
-              <div className="h-2 w-2/3 bg-muted-foreground/20 rounded-full" />
-              <div className="h-2 w-1/2 bg-muted-foreground/20 rounded-full" />
-            </div>
-          </div>
-        </div>
+        )}
       </CardContent>
 
       <CardFooter className="flex justify-between items-center bg-muted/20 border-t border-border/10 p-6">

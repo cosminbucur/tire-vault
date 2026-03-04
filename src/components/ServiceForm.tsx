@@ -4,10 +4,11 @@ import * as React from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { User, Building, Phone, Mail, CheckCircle2 } from "lucide-react"
+import { Wrench, Car, UserCog, ClipboardList, StickyNote, CheckCircle2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Form,
   FormControl,
@@ -17,44 +18,57 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
-const customerSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  company: z.string().min(2, "Company name must be at least 2 characters").optional().or(z.literal("")),
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format (e.g. +1234567890)"),
-  email: z.string().email("Invalid email address"),
+const serviceSchema = z.object({
+  licensePlate: z.string().min(1, "License plate is required").max(10, "License plate too long"),
+  mechanic: z.string().min(1, "Please select a mechanic"),
+  servicesPerformed: z.string().min(5, "Please describe the services performed"),
+  notes: z.string().optional(),
 })
 
-type CustomerFormValues = z.infer<typeof customerSchema>
+type ServiceFormValues = z.infer<typeof serviceSchema>
 
-export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
+const mechanics = [
+  { id: "m1", name: "John Doe" },
+  { id: "m2", name: "Jane Smith" },
+  { id: "m3", name: "Mike Ross" },
+  { id: "m4", name: "Sarah Connor" },
+]
+
+export function ServiceForm({ embedded = false }: { embedded?: boolean }) {
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
 
-  const form = useForm<CustomerFormValues>({
-    resolver: zodResolver(customerSchema),
+  const form = useForm<ServiceFormValues>({
+    resolver: zodResolver(serviceSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      company: "",
-      phone: "",
-      email: "",
+      licensePlate: "",
+      mechanic: "",
+      servicesPerformed: "",
+      notes: "",
     },
   })
 
-  async function onSubmit(data: CustomerFormValues) {
+  async function onSubmit(data: ServiceFormValues) {
     setIsSubmitting(true)
-    console.log("Registering customer:", data)
+    console.log("Saving service info:", data)
     
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500))
     
     setIsSubmitting(false)
     setSuccess(true)
-    form.reset()
+    // We don't necessarily want to reset if it's part of a stepper, 
+    // but the user might want a success state
     
     // Reset success message after 5 seconds
     setTimeout(() => setSuccess(false), 5000)
@@ -63,46 +77,17 @@ export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
   const formContent = (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="John" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
         <FormField
           control={form.control}
-          name="company"
+          name="licensePlate"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex items-center gap-2">
-                <Building className="h-3.5 w-3.5 text-muted-foreground" />
-                Company (Optional)
+                <Car className="h-3.5 w-3.5 text-muted-foreground" />
+                License Plate
               </FormLabel>
               <FormControl>
-                <Input placeholder="Acme Corp" {...field} />
+                <Input placeholder="B 123 ABC" className="uppercase" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -111,15 +96,47 @@ export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
 
         <FormField
           control={form.control}
-          name="phone"
+          name="mechanic"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-                Phone Number
+                <UserCog className="h-3.5 w-3.5 text-muted-foreground" />
+                Assigned Mechanic
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a mechanic" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {mechanics.map((mechanic) => (
+                    <SelectItem key={mechanic.id} value={mechanic.name}>
+                      {mechanic.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="servicesPerformed"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center gap-2">
+                <ClipboardList className="h-3.5 w-3.5 text-muted-foreground" />
+                Services Performed
               </FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="+1234567890" {...field} />
+                <Textarea 
+                  placeholder="Oil change, brake check, etc." 
+                  className="min-h-[100px] resize-none" 
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,15 +145,19 @@ export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
 
         <FormField
           control={form.control}
-          name="email"
+          name="notes"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex items-center gap-2">
-                <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-                Email Address
+                <StickyNote className="h-3.5 w-3.5 text-muted-foreground" />
+                Notes (Optional)
               </FormLabel>
               <FormControl>
-                <Input type="email" placeholder="john.doe@example.com" {...field} />
+                <Textarea 
+                  placeholder="Additional details or customer requests..." 
+                  className="min-h-[80px] resize-none" 
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -146,7 +167,7 @@ export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
         {success && (
           <div className="flex items-center gap-3 w-full p-3 rounded-lg bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 text-sm font-medium animate-in zoom-in-95 duration-300">
             <CheckCircle2 className="h-5 w-5 shrink-0" />
-            <span>Customer registered successfully!</span>
+            <span>Service info saved successfully!</span>
           </div>
         )}
 
@@ -169,10 +190,10 @@ export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
               {isSubmitting ? (
                 <div className="flex items-center gap-2">
                   <div className="h-4 w-4 border-2 border-primary-foreground/20 border-t-primary-foreground animate-spin rounded-full" />
-                  <span>Registering...</span>
+                  <span>Saving...</span>
                 </div>
               ) : (
-                "Register Customer"
+                "Save Service Info"
               )}
             </Button>
           </div>
@@ -194,13 +215,13 @@ export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
       <div className="h-2 w-full bg-gradient-to-r from-primary via-primary/80 to-primary/60" />
       <CardHeader className="space-y-1 pb-6">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-2xl font-bold tracking-tight">Register New Customer</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">Service Details</CardTitle>
           <div className="p-2 bg-primary/10 rounded-full">
-            <User className="h-5 w-5 text-primary" />
+            <Wrench className="h-5 w-5 text-primary" />
           </div>
         </div>
         <CardDescription className="text-muted-foreground">
-          Enter customer information to create a new profile in the system.
+          Enter details about the vehicle and the services being performed.
         </CardDescription>
       </CardHeader>
       
@@ -210,7 +231,7 @@ export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
       
       <CardFooter className="bg-muted/20 border-t border-border/10 py-4">
         <p className="text-[11px] text-center w-full text-muted-foreground italic">
-          All data is encrypted and stored securely.
+          All service records are stored and linked to the customer's history.
         </p>
       </CardFooter>
     </Card>
