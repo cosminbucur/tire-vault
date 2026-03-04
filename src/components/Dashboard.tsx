@@ -69,10 +69,10 @@ export default function Dashboard() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {[
-          { title: "Total Revenue", value: "$45,231.89", trend: "+20.1% from last month", icon: "💰" },
-          { title: "Subscriptions", value: "+2350", trend: "+180.1% from last month", icon: "👤" },
-          { title: "Sales", value: "+12,234", trend: "+19.1% from last month", icon: "🛍️" },
-          { title: "Active Now", value: "+573", trend: "+201 since last hour", icon: "📈" },
+          { title: "Total Revenue", value: "45,231.89 RON", trend: "+20.1% from last month", icon: "💰" },
+          { title: "Customers", value: "220", trend: "+10.1% from last month", icon: "👤" },
+          { title: "Sales", value: "12,234 RON", trend: "+19.1% from last month", icon: "🛍️" },
+          { title: "Tires in Storage", value: "640", trend: "+24 since last month", icon: "📈" },
         ].map((stat, i) => (
           <Card key={i} className="transition-all hover:shadow-md border-border/50 group">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
