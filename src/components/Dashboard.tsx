@@ -3,16 +3,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { CustomerForm } from "@/components/CustomerForm"
+import { VisitStepper } from "@/components/VisitStepper"
 import { Plus, LayoutDashboard, FileText, ArrowLeft } from "lucide-react"
 
 export default function Dashboard() {
-  const [showForm, setShowForm] = useState(false)
+  const [view, setView] = useState<"overview" | "customer" | "visit">("overview")
 
-  if (showForm) {
+  if (view === "customer") {
     return (
       <div className="flex flex-col gap-6 p-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
         <div className="flex items-center gap-4 mb-4">
-          <Button variant="ghost" size="icon" onClick={() => setShowForm(false)} className="rounded-full">
+          <Button variant="ghost" size="icon" onClick={() => setView("overview")} className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
@@ -23,6 +24,25 @@ export default function Dashboard() {
           </div>
         </div>
         <CustomerForm />
+      </div>
+    )
+  }
+
+  if (view === "visit") {
+    return (
+      <div className="flex flex-col gap-6 p-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
+        <div className="flex items-center gap-4 mb-4">
+          <Button variant="ghost" size="icon" onClick={() => setView("overview")} className="rounded-full">
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Register Visit</h1>
+            <p className="text-muted-foreground mt-1">
+              Follow the steps to register a new customer visit and service.
+            </p>
+          </div>
+        </div>
+        <VisitStepper />
       </div>
     )
   }
@@ -40,13 +60,13 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="hidden sm:flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            Export Data
-          </Button>
-          <Button onClick={() => setShowForm(true)} className="flex items-center gap-2 shadow-lg hover:shadow-primary/20">
+          <Button variant="outline" onClick={() => setView("customer")} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
-            Create New
+            New Customer
+          </Button>
+          <Button onClick={() => setView("visit")} className="flex items-center gap-2 shadow-lg hover:shadow-primary/20 bg-primary text-primary-foreground">
+            <FileText className="h-4 w-4" />
+            Register Visit
           </Button>
         </div>
       </div>
