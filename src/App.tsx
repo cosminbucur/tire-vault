@@ -6,6 +6,7 @@ import Dashboard from '@/components/Dashboard'
 import Header from '@/components/Header'
 import Auth from '@/components/Auth'
 import Storage from '@/components/Storage'
+import Reports from '@/components/Reports'
 import Visits from '@/components/Visits'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
@@ -53,6 +54,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/storage" element={<Storage />} />
           <Route path="/visits" element={<Visits />} />
+          <Route path="/reports" element={<Reports />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>
