@@ -16,22 +16,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import { CustomerForm } from "./CustomerForm"
-import { ServiceForm } from "./ServiceForm"
+import { CustomerForm, CustomerFormValues } from "./CustomerForm"
+import { ServiceForm, ServiceFormValues } from "./ServiceForm"
 import { TireForm } from "./TireForm"
-
-interface Tire {
-  id: string
-  width: string
-  height: string
-  diameterType: string
-  brand: string
-  rimType: "plate" | "alloy"
-  tireType: "regular" | "runflat"
-  wearIndicator: "Good" | "OK" | "Warning" | "Danger"
-  season: "summer" | "winter" | "all-season"
-  location: "car" | "storage"
-}
+import { VisitSummary, Tire } from "./VisitSummary"
+import { Separator } from "@/components/ui/separator"
 
 const steps = [
   {
@@ -64,6 +53,12 @@ export function VisitStepper() {
   const [currentStep, setCurrentStep] = React.useState(0)
   const [completedSteps, setCompletedSteps] = React.useState<number[]>([])
   
+  // Step 1 state
+  const [customerData, setCustomerData] = React.useState<CustomerFormValues | null>(null)
+  
+  // Step 2 state
+  const [serviceData, setServiceData] = React.useState<ServiceFormValues | null>(null)
+
   // Step 3 (Tires) state
   const [storagePoint, setStoragePoint] = React.useState("R1E1E2")
   const [capsNumber, setCapsNumber] = React.useState("16")
@@ -194,9 +189,17 @@ export function VisitStepper() {
 
       <CardContent className="min-h-[450px] flex flex-col items-center py-8 px-6">
         {currentStep === 0 ? (
-          <CustomerForm embedded={true} />
+          <CustomerForm 
+            embedded={true} 
+            onValuesChange={setCustomerData} 
+            initialValues={customerData || undefined}
+          />
         ) : currentStep === 1 ? (
-          <ServiceForm embedded={true} />
+          <ServiceForm 
+            embedded={true} 
+            onValuesChange={setServiceData}
+            initialValues={serviceData || undefined}
+          />
         ) : currentStep === 2 ? (
           <div className="w-full space-y-8 animate-in fade-in zoom-in-95 duration-500">
             {/* Global Storage Info */}
@@ -355,33 +358,14 @@ export function VisitStepper() {
             )}
           </div>
         ) : (
-          <div className="w-full max-w-lg space-y-6 animate-in fade-in zoom-in-95 duration-500 my-auto">
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-4 bg-primary/5 rounded-2xl ring-1 ring-primary/20 animate-bounce-subtle">
-                {React.createElement(steps[currentStep].icon, { className: "h-12 w-12 text-primary" })}
-              </div>
-              <div className="space-y-2">
-                <h2 className="text-xl font-semibold tracking-tight">{steps[currentStep].title}</h2>
-                <p className="text-muted-foreground max-w-sm">
-                  Placeholder for {steps[currentStep].description}. Details for this step will be implemented soon.
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-4 opacity-50 select-none">
-              <div className="h-10 w-full bg-muted rounded-md border border-dashed border-border/50 flex items-center px-4">
-                <div className="h-2 w-1/3 bg-muted-foreground/20 rounded-full" />
-              </div>
-              <div className="h-10 w-full bg-muted rounded-md border border-dashed border-border/50 flex items-center px-4">
-                <div className="h-2 w-1/2 bg-muted-foreground/20 rounded-full" />
-              </div>
-              <div className="h-24 w-full bg-muted rounded-md border border-dashed border-border/50 flex flex-col gap-2 p-4">
-                <div className="h-2 w-3/4 bg-muted-foreground/20 rounded-full" />
-                <div className="h-2 w-2/3 bg-muted-foreground/20 rounded-full" />
-                <div className="h-2 w-1/2 bg-muted-foreground/20 rounded-full" />
-              </div>
-            </div>
-          </div>
+          <VisitSummary 
+            customerData={customerData}
+            serviceData={serviceData}
+            tires={tires}
+            storagePoint={storagePoint}
+            capsNumber={capsNumber}
+            onEditStep={setCurrentStep}
+          />
         )}
       </CardContent>
 
@@ -400,7 +384,19 @@ export function VisitStepper() {
           {currentStep === steps.length - 1 ? (
             <Button 
               className="px-8 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
-              onClick={() => alert("Registration completed!")}
+              onClick={() => {
+                const finalData = {
+                  customer: customerData,
+                  service: serviceData,
+                  tires: tires,
+                  storage: {
+                    point: storagePoint,
+                    caps: capsNumber
+                  }
+                }
+                console.log("Final Registration Data:", finalData)
+                alert("Registration completed! Check console for data.")
+              }}
             >
               Finish Registration
             </Button>

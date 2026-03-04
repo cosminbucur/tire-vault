@@ -35,7 +35,7 @@ const serviceSchema = z.object({
   notes: z.string().optional(),
 })
 
-type ServiceFormValues = z.infer<typeof serviceSchema>
+export type ServiceFormValues = z.infer<typeof serviceSchema>
 
 const mechanics = [
   { id: "m1", name: "John Doe" },
@@ -44,19 +44,42 @@ const mechanics = [
   { id: "m4", name: "Sarah Connor" },
 ]
 
-export function ServiceForm({ embedded = false }: { embedded?: boolean }) {
+export function ServiceForm({ 
+  embedded = false,
+  onValuesChange,
+  initialValues
+}: { 
+  embedded?: boolean,
+  onValuesChange?: (values: ServiceFormValues) => void,
+  initialValues?: Partial<ServiceFormValues>
+}) {
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
 
   const form = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
-      licensePlate: "",
-      mechanic: "",
-      servicesPerformed: "",
-      notes: "",
+      licensePlate: initialValues?.licensePlate || "",
+      mechanic: initialValues?.mechanic || "",
+      servicesPerformed: initialValues?.servicesPerformed || "",
+      notes: initialValues?.notes || "",
     },
   })
+
+  // Sync changes to parent
+  React.useEffect(() => {
+    // Initial sync
+    if (onValuesChange) {
+      onValuesChange(form.getValues())
+    }
+
+    const { unsubscribe } = form.watch((value) => {
+      if (onValuesChange) {
+        onValuesChange(value as any)
+      }
+    })
+    return () => unsubscribe()
+  }, [form, onValuesChange])
 
   async function onSubmit(data: ServiceFormValues) {
     setIsSubmitting(true)

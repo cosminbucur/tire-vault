@@ -28,22 +28,45 @@ const customerSchema = z.object({
   email: z.string().email("Invalid email address"),
 })
 
-type CustomerFormValues = z.infer<typeof customerSchema>
+export type CustomerFormValues = z.infer<typeof customerSchema>
 
-export function CustomerForm({ embedded = false }: { embedded?: boolean }) {
+export function CustomerForm({ 
+  embedded = false, 
+  onValuesChange,
+  initialValues
+}: { 
+  embedded?: boolean,
+  onValuesChange?: (values: CustomerFormValues) => void,
+  initialValues?: Partial<CustomerFormValues>
+}) {
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
 
   const form = useForm<CustomerFormValues>({
     resolver: zodResolver(customerSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      company: "",
-      phone: "",
-      email: "",
+      firstName: initialValues?.firstName || "",
+      lastName: initialValues?.lastName || "",
+      company: initialValues?.company || "",
+      phone: initialValues?.phone || "",
+      email: initialValues?.email || "",
     },
   })
+
+  // Sync changes to parent
+  React.useEffect(() => {
+    // Initial sync
+    if (onValuesChange) {
+      onValuesChange(form.getValues())
+    }
+
+    const { unsubscribe } = form.watch((value) => {
+      if (onValuesChange) {
+        onValuesChange(value as any)
+      }
+    })
+    return () => unsubscribe()
+  }, [form, onValuesChange])
 
   async function onSubmit(data: CustomerFormValues) {
     setIsSubmitting(true)
