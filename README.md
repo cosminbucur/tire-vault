@@ -18,6 +18,7 @@ npx shadcn@latest init -d
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest init -d
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add button -y
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add avatar dropdown-menu -y
+NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add label form -y
 
 # supabase client
 pnpm add @supabase/supabase-js
@@ -35,10 +36,9 @@ pnpm add -D @tailwindcss/vite
 # run
 pnpm run dev
 
-
 # .env.local
-VITE_SUPABASE_URL=your_project_url
-VITE_SUPABASE_ANON_KEY=your_anon_key
+VITE_SUPABASE_URL=https://<project_id>.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
 ======================================================================================
