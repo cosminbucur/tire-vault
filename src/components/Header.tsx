@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabaseClient'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -53,9 +54,9 @@ export default function Header() {
         </div>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#" className="hover:text-primary transition-colors">Overview</a>
-          <a href="#" className="hover:text-primary transition-colors">Inventory</a>
-          <a href="#" className="hover:text-primary transition-colors">Appointments</a>
+          <Link to="/overview" className="hover:text-primary transition-colors">Overview</Link>
+          <Link to="/inventory" className="hover:text-primary transition-colors">Inventory</Link>
+          <Link to="/visits" className="hover:text-primary transition-colors">Visits</Link>
         </nav>
 
         <div className="flex items-center gap-4">

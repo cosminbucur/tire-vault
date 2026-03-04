@@ -5,6 +5,7 @@ import './App.css'
 import Dashboard from '@/components/Dashboard'
 import Header from '@/components/Header'
 import Auth from '@/components/Auth'
+import Visits from '@/components/Visits'
 import { Routes, Route, Navigate } from 'react-router-dom'
 function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -48,6 +49,7 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/visits" element={<Visits />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>
