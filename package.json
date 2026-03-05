@@ -1,7 +1,9 @@
 {
-  "name": "service-app",
+  "name": "tire-vault",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "author": "Freeminions",
+  "description": "Tire management application",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -14,7 +16,6 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@supabase/supabase-js": "^2.98.0",
-    "@types/luxon": "^3.7.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@tailwindcss/vite": "^4.2.1",
+    "@types/luxon": "^3.7.1",
     "@types/node": "^25.3.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -54,16 +56,25 @@
     "vite-plugin-electron-renderer": "^0.14.6"
   },
   "build": {
-    "appId": "com.serviceapp.app",
+    "appId": "com.freeminions.tirevault",
+    "productName": "TireVault",
     "mac": {
-      "category": "public.app-category.productivity"
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.png"
     },
     "directories": {
       "output": "dist-electron/release"
     },
     "files": [
-      "dist",
-      "dist-electron"
+      "dist/**/*",
+      "dist-electron/**/*",
+      "!dist/**/*.map",
+      "!dist-electron/**/*.map",
+      "!**/node_modules"
     ]
   },
   "pnpm": {

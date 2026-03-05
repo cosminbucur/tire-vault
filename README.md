@@ -15,15 +15,19 @@ pnpm install
 pnpm add -D shadcn-ui
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest init -d
 NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add \
-  button \
   avatar \
-  dropdown-menu \
-  label \
-  form \
-  radio-group \
-  popover \
+  button \
   command \
+  card \
+  dropdown-menu \
+  form \
+  label \
+  popover \
+  radio-group \
+  select \
   separator \
+  scroll-area \
+  table \
   -y
 ```
 
@@ -68,6 +72,10 @@ pnpm dev
 
 ```sh
 pnpm run build
-pnpm run electron:build
-pnpm run electron:deploy
+
+# build for mac
+npx electron-builder --mac
+
+# build for windows
+npx electron-builder --win
 ```
