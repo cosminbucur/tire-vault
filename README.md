@@ -106,7 +106,11 @@ pnpm tsc --noEmit
 ### dev: run the app
 
 ```sh
+# run on dev
 pnpm dev
+
+# run on prod (cloud)
+pnpm dev:prod
 ```
 
 ### prod: build and deploy

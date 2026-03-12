@@ -8,6 +8,7 @@
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
+    "dev:prod": "vite --mode production",
     "build": "rimraf dist dist-electron && vite build && electron-builder",
     "lint": "eslint .",
     "check": "tsc --noEmit",
