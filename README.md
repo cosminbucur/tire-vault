@@ -1,3 +1,5 @@
+[Repository](https://github.com/cosminbucur/tire-vault)
+
 ### React + Vite + TypeScript
 
 ```sh
@@ -72,10 +74,21 @@ pnpm dev
 
 ```sh
 pnpm run build
+pnpm run build --linux deb --x64
 
 # build for mac
 npx electron-builder --mac
 
 # build for windows
 npx electron-builder --win
+
+# build for linux
+npx electron-builder --linux
+
+# list asar contents
+pnpm add -D @electron/asar
+npx @electron/asar list dist-electron/release/linux-arm64-unpacked/resources/app.asar > ./output.md
+
+# clean build
+pnpm add -D rimraf
 ```

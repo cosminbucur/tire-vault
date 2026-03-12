@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, nativeImage } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -20,7 +20,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, 'assets/icon.png'),
+    icon: path.join(process.env.VITE_PUBLIC!, 'icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: true,
@@ -55,4 +55,11 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  if (process.platform === 'darwin') {
+    const iconPath = path.join(process.env.VITE_PUBLIC!, 'icon.png')
+    const image = nativeImage.createFromPath(iconPath)
+    app.dock?.setIcon(image)
+  }
+  createWindow()
+})
