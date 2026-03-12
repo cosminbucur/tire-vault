@@ -112,7 +112,7 @@ export function TireForm({
       width: initialData?.width || "215",
       height: initialData?.height || "65",
       diameterType: initialData?.diameterType || "R15",
-      brand: initialData?.brand || "",
+      brand: initialData?.brand || "Michelin",
       rimType: initialData?.rimType || "alloy",
       tireType: initialData?.tireType || "regular",
       wearIndicator: initialData?.wearIndicator || "Good",

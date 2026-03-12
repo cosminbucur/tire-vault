@@ -29,6 +29,7 @@ NODE_TLS_REJECT_UNAUTHORIZED=0 npx shadcn@latest add \
   select \
   separator \
   scroll-area \
+  sonner \
   table \
   -y
 ```
@@ -43,7 +44,7 @@ pnpm add -D @tailwindcss/vite
 # supabase client
 pnpm add @supabase/supabase-js
 
-# supabase cli
+# supabase cli (can be instaled with homebrew or pnpm. going the pnpm route)
 pnpm add -D supabase
 
 # init supabase
@@ -53,6 +54,44 @@ pnpm exec supabase start
 # .env.local
 VITE_SUPABASE_URL=https://<project_id>.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=
+
+# generate migration file
+pnpm supabase db diff -f init_schema
+
+# start local database
+pnpm supabase start
+
+# apply migration
+pnpm supabase migration up
+
+# login
+pnpm supabase login
+
+# link to remote project
+pnpm supabase link
+
+# push changes
+pnpm supabase db push
+
+# recreate local db and apply migrations
+# Whenever you add new migration files or change the schema manually, running pnpm supabase db reset is the best way to ensure your local environment is fully in sync
+pnpm supabase db reset
+
+# restart
+pnpm supabase stop --no-backup && pnpm supabase start
+
+# list migrations
+pnpm supabase migration list
+
+# query
+pnpm supabase db query "SELECT count(*) FROM public.customers;"
+
+# query with curl
+curl -H "apikey: <publishable_key>" http://127.0.0.1:54321/rest/v1/visits
+
+# http://127.0.0.1:54321/rest/v1/customers
+# http://127.0.0.1:54321/rest/v1/visits
+
 ```
 
 ### desktop app: electron

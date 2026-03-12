@@ -8,6 +8,7 @@ import Auth from '@/components/Auth'
 import Storage from '@/components/Storage'
 import Reports from '@/components/Reports'
 import Visits from '@/components/Visits'
+import { Toaster } from "@/components/ui/sonner"
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>
+      <Toaster />
     </div>
   )
 }

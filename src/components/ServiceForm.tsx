@@ -38,10 +38,8 @@ const serviceSchema = z.object({
 export type ServiceFormValues = z.infer<typeof serviceSchema>
 
 const mechanics = [
-  { id: "m1", name: "John Doe" },
-  { id: "m2", name: "Jane Smith" },
-  { id: "m3", name: "Mike Ross" },
-  { id: "m4", name: "Sarah Connor" },
+  { id: "7b823e64-1234-4321-abcd-1234567890ab", name: "Alex Vasile" },
+  { id: "8c934f75-5678-8765-bcde-0987654321ba", name: "Vali Marin" },
 ]
 
 export function ServiceForm({ 
@@ -134,7 +132,7 @@ export function ServiceForm({
                 </FormControl>
                 <SelectContent>
                   {mechanics.map((mechanic) => (
-                    <SelectItem key={mechanic.id} value={mechanic.name}>
+                    <SelectItem key={mechanic.id} value={mechanic.id}>
                       {mechanic.name}
                     </SelectItem>
                   ))}

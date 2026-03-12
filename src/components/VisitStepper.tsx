@@ -21,6 +21,9 @@ import { ServiceForm, ServiceFormValues } from "./ServiceForm"
 import { TireForm } from "./TireForm"
 import { VisitSummary, Tire } from "./VisitSummary"
 import { Separator } from "@/components/ui/separator"
+import { visitService } from "@/lib/visitService"
+import { toast } from "sonner"
+import { useNavigate } from "react-router-dom"
 
 const steps = [
   {
@@ -51,18 +54,40 @@ const steps = [
 
 export function VisitStepper() {
   const [currentStep, setCurrentStep] = React.useState(0)
-  const [completedSteps, setCompletedSteps] = React.useState<number[]>([])
+  const [completedSteps, setCompletedSteps] = React.useState<number[]>([0, 1, 2])
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const navigate = useNavigate()
   
   // Step 1 state
-  const [customerData, setCustomerData] = React.useState<CustomerFormValues | null>(null)
+  const [customerData, setCustomerData] = React.useState<CustomerFormValues | null>({
+    firstName: "John",
+    lastName: "Doe",
+    phone: "+40722123456",
+    email: "john.doe@example.com",
+    company: "Test Corp"
+  })
   
   // Step 2 state
-  const [serviceData, setServiceData] = React.useState<ServiceFormValues | null>(null)
+  const [serviceData, setServiceData] = React.useState<ServiceFormValues | null>({
+    licensePlate: "B 123 ABC",
+    mechanic: "7b823e64-1234-4321-abcd-1234567890ab", // Alex Vasile
+    servicesPerformed: "Regular maintenance and oil change",
+    notes: "Please check the brake pads as well."
+  })
 
   // Step 3 (Tires) state
   const [storagePoint, setStoragePoint] = React.useState("R1E1E2")
   const [capsNumber, setCapsNumber] = React.useState("16")
-  const [tires, setTires] = React.useState<Tire[]>([])
+  const [tires, setTires] = React.useState<Tire[]>([
+    { id: "t1", location: "car", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "Good", season: "summer" },
+    { id: "t2", location: "car", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "Good", season: "summer" },
+    { id: "t3", location: "car", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "Good", season: "summer" },
+    { id: "t4", location: "car", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "Good", season: "summer" },
+    { id: "t5", location: "storage", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "OK", season: "winter" },
+    { id: "t6", location: "storage", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "OK", season: "winter" },
+    { id: "t7", location: "storage", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "OK", season: "winter" },
+    { id: "t8", location: "storage", brand: "Michelin", width: "215", height: "65", diameterType: "R15", rimType: "alloy", tireType: "regular", wearIndicator: "OK", season: "winter" },
+  ])
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [editingTireId, setEditingTireId] = React.useState<string | null>(null)
 
@@ -384,21 +409,53 @@ export function VisitStepper() {
           {currentStep === steps.length - 1 ? (
             <Button 
               className="px-8 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
-              onClick={() => {
-                const finalData = {
-                  customer: customerData,
-                  service: serviceData,
-                  tires: tires,
-                  storage: {
-                    point: storagePoint,
-                    caps: capsNumber
-                  }
+              disabled={isSubmitting}
+              onClick={async () => {
+                if (!customerData || !serviceData) {
+                  toast.error("Missing Information", {
+                    description: "Please complete all steps before finishing.",
+                  })
+                  return
                 }
-                console.log("Final Registration Data:", finalData)
-                alert("Registration completed! Check console for data.")
+
+                setIsSubmitting(true)
+                try {
+                  await visitService.createVisit({
+                    customer: customerData,
+                    service: serviceData,
+                    tires: tires,
+                    storage: {
+                      point: storagePoint,
+                      caps: capsNumber,
+                    },
+                  })
+                  
+                  toast.success("Registration Complete", {
+                    description: "The visit has been successfully registered.",
+                  })
+                  
+                  // Redirect to visits list after a short delay
+                  setTimeout(() => {
+                    navigate("/visits")
+                  }, 1500)
+                } catch (error: any) {
+                  console.error("Error saving visit:", error)
+                  toast.error("Error", {
+                    description: error.message || "Failed to save visit record.",
+                  })
+                } finally {
+                  setIsSubmitting(false)
+                }
               }}
             >
-              Finish Registration
+              {isSubmitting ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 border-2 border-primary-foreground/20 border-t-primary-foreground animate-spin rounded-full" />
+                  <span>Saving...</span>
+                </div>
+              ) : (
+                "Finish Registration"
+              )}
             </Button>
           ) : (
             <Button 

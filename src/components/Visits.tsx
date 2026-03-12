@@ -1,5 +1,7 @@
-import { useState } from "react"
-import { Search, FileText, ChevronLeft, ChevronRight, ArrowUpDown } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Search, FileText, ChevronLeft, ChevronRight, ArrowUpDown, Loader2 } from "lucide-react"
+import { visitService } from "@/lib/visitService"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -13,81 +15,37 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 
-const MOCK_VISITS = [
-  {
-    id: "VST-001",
-    licensePlate: "B-10-ABC",
-    customerName: "Alice Johnson",
-    services: "Tire Replacement, Alignment",
-    date: "2026-03-04",
-    status: "Completed",
-  },
-  {
-    id: "VST-002",
-    licensePlate: "CJ-22-XYZ",
-    customerName: "Bob Smith",
-    services: "Oil Change",
-    date: "2026-03-04",
-    status: "In Progress",
-  },
-  {
-    id: "VST-003",
-    licensePlate: "TM-99-QWE",
-    customerName: "Charlie Davis",
-    services: "Brake Pads, Fluid Check",
-    date: "2026-03-05",
-    status: "Pending",
-  },
-  {
-    id: "VST-004",
-    licensePlate: "B-12-DEF",
-    customerName: "Diana Prince",
-    services: "Winter Tires Setup",
-    date: "2026-03-05",
-    status: "Pending",
-  },
-  {
-    id: "VST-005",
-    licensePlate: "CJ-88-PLM",
-    customerName: "Edward Elric",
-    services: "Full Checkup",
-    date: "2026-03-05",
-    status: "Completed",
-  },
-  {
-    id: "VST-006",
-    licensePlate: "B-99-ZZZ",
-    customerName: "Frank Castle",
-    services: "Brake Fluid Change",
-    date: "2026-03-06",
-    status: "Pending",
-  },
-  {
-    id: "VST-007",
-    licensePlate: "TM-11-AAA",
-    customerName: "George Smith",
-    services: "Tire Pressure Check",
-    date: "2026-03-06",
-    status: "In Progress",
-  },
-  {
-    id: "VST-008",
-    licensePlate: "B-44-QWE",
-    customerName: "Hannah Montana",
-    services: "Alignment",
-    date: "2026-03-07",
-    status: "Pending",
-  },
-]
+// Mock visits removed in favor of Supabase data
 
 const ITEMS_PER_PAGE = 5
 
 export default function Visits() {
+  const [visits, setVisits] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
 
-  const filteredVisits = MOCK_VISITS.filter((visit) =>
+  useEffect(() => {
+    async function fetchVisits() {
+      setIsLoading(true)
+      try {
+        const data = await visitService.getVisits()
+        setVisits(data)
+      } catch (error: any) {
+        console.error("Error fetching visits:", error)
+        toast.error("Error", {
+          description: "Failed to load visits from the database.",
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchVisits()
+  }, [])
+
+  const filteredVisits = visits.filter((visit) =>
     visit.licensePlate.toLowerCase().includes(searchTerm.toLowerCase())
   ).sort((a, b) => {
     const dateA = new Date(a.date).getTime()
@@ -172,7 +130,16 @@ export default function Visits() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedVisits.length > 0 ? (
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="h-32 text-center">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                      <span className="text-muted-foreground animate-pulse text-sm">Loading visits...</span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : paginatedVisits.length > 0 ? (
                 paginatedVisits.map((visit) => (
                   <TableRow key={visit.id} className="cursor-pointer hover:bg-muted/50 transition-colors">
                     <TableCell className="font-medium px-6">{visit.licensePlate}</TableCell>
@@ -189,7 +156,7 @@ export default function Visits() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
-                    No visits found matching "{searchTerm}".
+                    {searchTerm ? `No visits found matching "${searchTerm}".` : "No visits registered yet."}
                   </TableCell>
                 </TableRow>
               )}
