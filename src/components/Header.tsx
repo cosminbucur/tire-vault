@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { supabase } from '@/lib/supabaseClient'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -16,6 +16,7 @@ import { Warehouse, LogOut, Settings, User, CreditCard } from "lucide-react"
 
 export default function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null)
+  const location = useLocation()
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -39,26 +40,46 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-6 mx-auto max-w-7xl">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105">
+        <Link to="/dashboard" className="flex items-center gap-3 group transition-all duration-300">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
             <Warehouse className="h-6 w-6" />
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent group-hover:from-primary group-hover:to-primary/40 transition-all duration-300">
               TireVault
             </span>
-            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold leading-none">
+            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold leading-none group-hover:text-primary/70 transition-colors duration-300">
               Premium Storage
             </span>
           </div>
-        </div>
+        </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link to="/dashboard" className="hover:text-primary transition-colors">Overview</Link>
-          <Link to="/storage" className="hover:text-primary transition-colors">Storage</Link>
-          <Link to="/visits" className="hover:text-primary transition-colors">Visits</Link>
-          <Link to="/reports" className="hover:text-primary transition-colors">Reports</Link>
-          <Link to="/admin" className="hover:text-primary transition-colors">Admin</Link>
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+          {[
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Storage', path: '/storage' },
+            { name: 'Visits', path: '/visits' },
+            { name: 'Reports', path: '/reports' },
+            { name: 'Admin', path: '/admin' },
+          ].map((item) => {
+            const isActive = location.pathname === item.path
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`relative py-1 transition-all duration-300 hover:text-primary group ${
+                  isActive ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                {item.name}
+                <span 
+                  className={`absolute inset-x-0 -bottom-1 h-0.5 bg-primary transition-transform duration-300 origin-left ${
+                    isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                  }`} 
+                />
+              </Link>
+            )
+          })}
         </nav>
 
         <div className="flex items-center gap-4">
