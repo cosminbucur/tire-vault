@@ -2,9 +2,8 @@ import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { CustomerForm } from "@/components/CustomerForm"
-import { VisitStepper } from "@/components/VisitStepper"
-import { Plus, LayoutDashboard, FileText, ArrowLeft } from "lucide-react"
+import { CustomerForm, VisitStepper } from "@/components/Visits"
+import { LayoutDashboard, FileText, ArrowLeft } from "lucide-react"
 
 export default function Dashboard() {
   const [view, setView] = useState<"overview" | "customer" | "visit">("overview")

@@ -11,20 +11,18 @@ import { Input } from "@/components/ui/input"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
 
 const customerSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   company: z.string().min(2, "Company name must be at least 2 characters").optional().or(z.literal("")),
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format (e.g. +1234567890)"),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format (e.g. 0722 333 444)"),
   email: z.string().email("Invalid email address"),
 })
 
@@ -142,7 +140,7 @@ export function CustomerForm({
                 Phone Number
               </FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="+1234567890" {...field} />
+                <Input type="tel" placeholder="0722 333 444" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

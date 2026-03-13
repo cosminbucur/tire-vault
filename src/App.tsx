@@ -7,7 +7,7 @@ import Header from '@/components/Header'
 import Auth from '@/components/Auth'
 import Storage from '@/components/Storage'
 import Reports from '@/components/Reports'
-import Visits from '@/components/Visits'
+import { Visits } from '@/components/Visits'
 import AdminLayout from '@/components/Admin/AdminLayout'
 import MechanicManagement from '@/components/Admin/Mechanics/MechanicManagement'
 import { Toaster } from "@/components/ui/sonner"

@@ -4,7 +4,7 @@ create type "public"."tire_rim" as enum ('plate', 'alloy');
 
 create type "public"."tire_season" as enum ('summer', 'winter', 'all_season');
 
-create type "public"."tire_type" as enum ('regular', 'run-flat');
+create type "public"."tire_type" as enum ('regular', 'runflat');
 
 create type "public"."tire_wear" as enum ('good', 'ok', 'warning', 'danger');
 

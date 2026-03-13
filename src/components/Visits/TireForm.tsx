@@ -51,7 +51,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 
 const tireFormSchema = z.object({
@@ -430,7 +429,7 @@ export function TireForm({
                             <FormControl>
                               <RadioGroupItem value={val} id={`rim-${val}`} />
                             </FormControl>
-                            <label htmlFor={`rim-${val}`} className="text-xs capitalize cursor-pointer">
+                            <label htmlFor={`rim-${val}`} className="text-xs cursor-pointer">
                               {val}
                             </label>
                           </FormItem>
@@ -461,7 +460,7 @@ export function TireForm({
                             <FormControl>
                               <RadioGroupItem value={val} id={`tire-${val}`} />
                             </FormControl>
-                            <label htmlFor={`tire-${val}`} className="text-xs capitalize cursor-pointer">
+                            <label htmlFor={`tire-${val}`} className="text-xs cursor-pointer">
                               {val}
                             </label>
                           </FormItem>

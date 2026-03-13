@@ -1,7 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { CustomerFormValues } from "@/components/CustomerForm";
-import { ServiceFormValues } from "@/components/ServiceForm";
-import { Tire } from "@/components/VisitSummary";
+import { CustomerFormValues, ServiceFormValues, Tire } from "@/components/Visits";
 
 export interface VisitData {
   customer: CustomerFormValues;

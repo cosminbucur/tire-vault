@@ -19,7 +19,7 @@ import { Badge } from "@/components/ui/badge"
 
 const ITEMS_PER_PAGE = 5
 
-export default function Visits() {
+export function Visits() {
   const [visits, setVisits] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")

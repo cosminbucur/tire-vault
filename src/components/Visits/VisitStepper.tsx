@@ -17,10 +17,9 @@ import {
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { CustomerForm, CustomerFormValues } from "./CustomerForm"
-import { ServiceForm, ServiceFormValues } from "./ServiceForm"
+import { ServiceForm, ServiceFormValues, Mechanic } from "./ServiceForm"
 import { TireForm } from "./TireForm"
 import { VisitSummary, Tire } from "./VisitSummary"
-import { Separator } from "@/components/ui/separator"
 import { visitService } from "@/lib/visitService"
 import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
@@ -56,7 +55,28 @@ export function VisitStepper() {
   const [currentStep, setCurrentStep] = React.useState(0)
   const [completedSteps, setCompletedSteps] = React.useState<number[]>([0, 1, 2])
   const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [mechanics, setMechanics] = React.useState<Mechanic[]>([])
   const navigate = useNavigate()
+
+  React.useEffect(() => {
+    async function fetchMechanics() {
+      const { data, error } = await import("@/lib/supabaseClient").then(({ supabase }) => 
+        supabase
+          .from("mechanics")
+          .select("id, first_name, last_name")
+          .eq("is_active", true)
+          .order("first_name")
+      )
+
+      if (error) {
+        console.error("Failed to fetch mechanics:", error)
+      } else {
+        setMechanics(data || [])
+      }
+    }
+
+    fetchMechanics()
+  }, [])
   
   // Step 1 state
   const [customerData, setCustomerData] = React.useState<CustomerFormValues | null>({
@@ -224,6 +244,7 @@ export function VisitStepper() {
             embedded={true} 
             onValuesChange={setServiceData}
             initialValues={serviceData || undefined}
+            mechanics={mechanics}
           />
         ) : currentStep === 2 ? (
           <div className="w-full space-y-8 animate-in fade-in zoom-in-95 duration-500">
@@ -383,12 +404,13 @@ export function VisitStepper() {
             )}
           </div>
         ) : (
-          <VisitSummary 
+          <VisitSummary
             customerData={customerData}
             serviceData={serviceData}
             tires={tires}
             storagePoint={storagePoint}
             capsNumber={capsNumber}
+            mechanics={mechanics}
             onEditStep={setCurrentStep}
           />
         )}
@@ -506,6 +528,10 @@ function TireItem({ tire, onDelete, onClone, onEdit }: {
             <span className="flex items-center gap-1">
               <Disc className="h-3 w-3 opacity-30" />
               {tire.rimType}
+            </span>
+            <span className="flex items-center gap-1">
+              <Disc className="h-3 w-3 opacity-30" />
+              {tire.tireType}
             </span>
           </div>
         </div>

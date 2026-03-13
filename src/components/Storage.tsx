@@ -57,18 +57,18 @@ import {
 
 // Mock Data
 const MOCK_STORAGE_DATA = [
-  { id: 1, storagePoint: "R1E1E1", licensePlate: "B-10-XYZ", tiresCount: 4 },
-  { id: 2, storagePoint: "R1E1E2", licensePlate: "B-11-XYZ", tiresCount: 4 },
-  { id: 3, storagePoint: "R1E1E3", licensePlate: "B-12-XYZ", tiresCount: 4 },
-  { id: 4, storagePoint: "R1E2E1", licensePlate: "B-13-XYZ", tiresCount: 4 },
-  { id: 5, storagePoint: "R1E2E2", licensePlate: "B-14-XYZ", tiresCount: 4 },
-  { id: 6, storagePoint: "R1E2E3", licensePlate: "B-15-XYZ", tiresCount: 4 },
-  { id: 7, storagePoint: "R1E3E1", licensePlate: "B-16-XYZ", tiresCount: 4 },
-  { id: 8, storagePoint: "R1E3E2", licensePlate: "B-17-XYZ", tiresCount: 4 },
-  { id: 9, storagePoint: "R1E3E3", licensePlate: "B-18-XYZ", tiresCount: 4 },
-  { id: 10, storagePoint: "R1E4E1", licensePlate: "B-19-XYZ", tiresCount: 4 },
-  { id: 11, storagePoint: "R1E4E2", licensePlate: "B-20-XYZ", tiresCount: 4 },
-  { id: 12, storagePoint: "R1E4E3", licensePlate: "B-21-XYZ", tiresCount: 4 },
+  { id: 1, storagePoint: "R1E1E1", licensePlate: "B10XYZ", tiresCount: 4 },
+  { id: 2, storagePoint: "R1E1E2", licensePlate: "B11XYZ", tiresCount: 4 },
+  { id: 3, storagePoint: "R1E1E3", licensePlate: "B12XYZ", tiresCount: 4 },
+  { id: 4, storagePoint: "R1E2E1", licensePlate: "B13XYZ", tiresCount: 4 },
+  { id: 5, storagePoint: "R1E2E2", licensePlate: "B14XYZ", tiresCount: 4 },
+  { id: 6, storagePoint: "R1E2E3", licensePlate: "B15XYZ", tiresCount: 4 },
+  { id: 7, storagePoint: "R1E3E1", licensePlate: "B16XYZ", tiresCount: 4 },
+  { id: 8, storagePoint: "R1E3E2", licensePlate: "B17XYZ", tiresCount: 4 },
+  { id: 9, storagePoint: "R1E3E3", licensePlate: "B18XYZ", tiresCount: 4 },
+  { id: 10, storagePoint: "R1E4E1", licensePlate: "B19XYZ", tiresCount: 4 },
+  { id: 11, storagePoint: "R1E4E2", licensePlate: "B20XYZ", tiresCount: 4 },
+  { id: 12, storagePoint: "R1E4E3", licensePlate: "B21XYZ", tiresCount: 4 },
 ]
 
 const EMPTY_STORAGE_POINTS = [

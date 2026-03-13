@@ -26,7 +26,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
 
 const serviceSchema = z.object({
   licensePlate: z.string().min(1, "License plate is required").max(10, "License plate too long"),
@@ -37,7 +36,7 @@ const serviceSchema = z.object({
 
 export type ServiceFormValues = z.infer<typeof serviceSchema>
 
-interface Mechanic {
+export interface Mechanic {
   id: string
   first_name: string
   last_name: string
@@ -46,17 +45,23 @@ interface Mechanic {
 export function ServiceForm({ 
   embedded = false,
   onValuesChange,
-  initialValues
+  initialValues,
+  mechanics // Added mechanics prop
 }: { 
   embedded?: boolean,
   onValuesChange?: (values: ServiceFormValues) => void,
-  initialValues?: Partial<ServiceFormValues>
+  initialValues?: Partial<ServiceFormValues>,
+  mechanics?: Mechanic[] // Added mechanics to prop type
 }) {
-  const [mechanics, setMechanics] = React.useState<Mechanic[]>([])
+  const [internalMechanics, setInternalMechanics] = React.useState<Mechanic[]>([]) // Renamed state variable
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
 
+  const displayMechanics = mechanics || internalMechanics // Use prop mechanics if provided, else internal
+
   React.useEffect(() => {
+    if (mechanics && mechanics.length > 0) return; // If mechanics are provided via props, don't fetch internally
+    
     async function fetchMechanics() {
       const { data, error } = await import("@/lib/supabaseClient").then(({ supabase }) => 
         supabase
@@ -69,12 +74,12 @@ export function ServiceForm({
       if (error) {
         console.error("Failed to fetch mechanics:", error)
       } else {
-        setMechanics(data || [])
+        setInternalMechanics(data || [])
       }
     }
 
     fetchMechanics()
-  }, [])
+  }, [mechanics])
 
   const form = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceSchema),
@@ -130,7 +135,7 @@ export function ServiceForm({
                 License Plate
               </FormLabel>
               <FormControl>
-                <Input placeholder="B 123 ABC" className="uppercase" {...field} />
+                <Input placeholder="B123ABC" className="uppercase" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -153,7 +158,7 @@ export function ServiceForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {mechanics.map((mechanic) => (
+                  {displayMechanics.map((mechanic) => (
                     <SelectItem key={mechanic.id} value={mechanic.id}>
                       {mechanic.first_name} {mechanic.last_name}
                     </SelectItem>

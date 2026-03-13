@@ -1,12 +1,11 @@
 "use client"
 
-import * as React from "react"
 import { User, Wrench, Disc, Pencil, Car, Warehouse, Hash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { CustomerFormValues } from "./CustomerForm"
-import { ServiceFormValues } from "./ServiceForm"
+import { ServiceFormValues, Mechanic } from "./ServiceForm"
 
 export interface Tire {
   id: string
@@ -25,8 +24,9 @@ interface VisitSummaryProps {
   customerData: CustomerFormValues | null
   serviceData: ServiceFormValues | null
   tires: Tire[]
-  storagePoint: string
+   storagePoint: string
   capsNumber: string
+  mechanics: Mechanic[]
   onEditStep: (stepIndex: number) => void
 }
 
@@ -34,10 +34,16 @@ export function VisitSummary({
   customerData,
   serviceData,
   tires,
-  storagePoint,
+   storagePoint,
   capsNumber,
+  mechanics,
   onEditStep
 }: VisitSummaryProps) {
+  const selectedMechanic = mechanics.find(m => m.id === serviceData?.mechanic)
+  const mechanicName = selectedMechanic 
+    ? `${selectedMechanic.first_name} ${selectedMechanic.last_name}`
+    : serviceData?.mechanic || "—"
+
   return (
     <div className="w-full space-y-8 animate-in fade-in zoom-in-95 duration-500">
       <div className="flex flex-col gap-6 max-w-2xl mx-auto">
@@ -104,7 +110,7 @@ export function VisitSummary({
               </div>
               <div className="space-y-1">
                 <p className="text-[10px] uppercase font-bold text-muted-foreground/70">Mechanic</p>
-                <p className="font-semibold">{serviceData?.mechanic || "—"}</p>
+                <p className="font-semibold">{mechanicName}</p>
               </div>
             </div>
             <div className="space-y-4">
@@ -175,7 +181,7 @@ export function VisitSummary({
                         </Badge>
                       </span>
                       <span className="text-muted-foreground">
-                        {tire.width}/{tire.height} {tire.diameterType} • {tire.season} • {tire.rimType}
+                        {tire.width}/{tire.height} {tire.diameterType} • {tire.season} • {tire.rimType} • {tire.tireType}
                       </span>
                     </div>
                   </div>
@@ -209,7 +215,7 @@ export function VisitSummary({
                         </Badge>
                       </span>
                       <span className="text-muted-foreground">
-                        {tire.width}/{tire.height} {tire.diameterType} • {tire.season} • {tire.rimType}
+                        {tire.width}/{tire.height} {tire.diameterType} • {tire.season} • {tire.rimType} • {tire.tireType}
                       </span>
                     </div>
                   </div>
