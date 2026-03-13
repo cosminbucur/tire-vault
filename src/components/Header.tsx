@@ -54,10 +54,11 @@ export default function Header() {
         </div>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link to="/overview" className="hover:text-primary transition-colors">Overview</Link>
+          <Link to="/dashboard" className="hover:text-primary transition-colors">Overview</Link>
           <Link to="/storage" className="hover:text-primary transition-colors">Storage</Link>
           <Link to="/visits" className="hover:text-primary transition-colors">Visits</Link>
           <Link to="/reports" className="hover:text-primary transition-colors">Reports</Link>
+          <Link to="/admin" className="hover:text-primary transition-colors">Admin</Link>
         </nav>
 
         <div className="flex items-center gap-4">

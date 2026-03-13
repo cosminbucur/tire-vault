@@ -8,6 +8,8 @@ import Auth from '@/components/Auth'
 import Storage from '@/components/Storage'
 import Reports from '@/components/Reports'
 import Visits from '@/components/Visits'
+import AdminLayout from '@/components/Admin/AdminLayout'
+import MechanicManagement from '@/components/Admin/Mechanics/MechanicManagement'
 import { Toaster } from "@/components/ui/sonner"
 import { Routes, Route, Navigate } from 'react-router-dom'
 
@@ -56,6 +58,10 @@ function App() {
           <Route path="/storage" element={<Storage />} />
           <Route path="/visits" element={<Visits />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Navigate to="/admin/mechanics" replace />} />
+            <Route path="mechanics" element={<MechanicManagement />} />
+          </Route>
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>

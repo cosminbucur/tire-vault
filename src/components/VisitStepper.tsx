@@ -70,7 +70,7 @@ export function VisitStepper() {
   // Step 2 state
   const [serviceData, setServiceData] = React.useState<ServiceFormValues | null>({
     licensePlate: "B 123 ABC",
-    mechanic: "7b823e64-1234-4321-abcd-1234567890ab", // Alex Vasile
+    mechanic: "", // Removed hardcoded mechanic
     servicesPerformed: "Regular maintenance and oil change",
     notes: "Please check the brake pads as well."
   })

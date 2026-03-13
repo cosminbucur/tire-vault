@@ -37,10 +37,11 @@ const serviceSchema = z.object({
 
 export type ServiceFormValues = z.infer<typeof serviceSchema>
 
-const mechanics = [
-  { id: "7b823e64-1234-4321-abcd-1234567890ab", name: "Alex Vasile" },
-  { id: "8c934f75-5678-8765-bcde-0987654321ba", name: "Vali Marin" },
-]
+interface Mechanic {
+  id: string
+  first_name: string
+  last_name: string
+}
 
 export function ServiceForm({ 
   embedded = false,
@@ -51,8 +52,29 @@ export function ServiceForm({
   onValuesChange?: (values: ServiceFormValues) => void,
   initialValues?: Partial<ServiceFormValues>
 }) {
+  const [mechanics, setMechanics] = React.useState<Mechanic[]>([])
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
+
+  React.useEffect(() => {
+    async function fetchMechanics() {
+      const { data, error } = await import("@/lib/supabaseClient").then(({ supabase }) => 
+        supabase
+          .from("mechanics")
+          .select("id, first_name, last_name")
+          .eq("is_active", true)
+          .order("first_name")
+      )
+
+      if (error) {
+        console.error("Failed to fetch mechanics:", error)
+      } else {
+        setMechanics(data || [])
+      }
+    }
+
+    fetchMechanics()
+  }, [])
 
   const form = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceSchema),
@@ -133,7 +155,7 @@ export function ServiceForm({
                 <SelectContent>
                   {mechanics.map((mechanic) => (
                     <SelectItem key={mechanic.id} value={mechanic.id}>
-                      {mechanic.name}
+                      {mechanic.first_name} {mechanic.last_name}
                     </SelectItem>
                   ))}
                 </SelectContent>
